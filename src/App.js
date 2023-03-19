@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Character from "./components/Character/Character";
+
+import './App.css'
 
 function App() {
+  const [heroPosition, setHeroPosition] = useState(
+    {
+      'position': {
+        'x': 0,
+        'y': 0,
+      }
+    }
+  );
+
+  const heroPositionChange = (x, y) => {
+    setHeroPosition({ ...heroPosition, position: {x: heroPosition.position.x + x, y: heroPosition.position.y + y}, })
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Character
+        onCharacterChange={ ([x, y]) => heroPositionChange(x, y) }
+        heroPosition={ heroPosition }
+      />
     </div>
   );
 }

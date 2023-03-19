@@ -1,0 +1,14 @@
+.map {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+}
+
+.block {
+  width: 15px;
+  height: 15px;
+  font-size: 20px;
+}

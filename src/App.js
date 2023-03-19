@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Character from "./components/Character/Character";
+import Map from "./components/Map/Map";
 
 import './App.css'
 
@@ -23,6 +24,7 @@ function App() {
         onCharacterChange={ ([x, y]) => heroPositionChange(x, y) }
         heroPosition={ heroPosition }
       />
+      <Map />
     </div>
   );
 }

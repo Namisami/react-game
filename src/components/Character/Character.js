@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 
+import './Character.css'
+
 const Character = ({ onCharacterChange, heroPosition }) => {
   const move = (e) => {
     const keyPressed = e.key;
@@ -21,19 +23,17 @@ const Character = ({ onCharacterChange, heroPosition }) => {
     };
   });
 
-  const style = {}
-  console.log(style)
-
   return (
-  <div 
+  <img 
     className="character"
     style={{
       left: `${heroPosition.position.x * process.env.REACT_APP_SYMBOL_SIZE}px`, 
       top: `${heroPosition.position.y * process.env.REACT_APP_SYMBOL_SIZE}px`
     }}
-  >
-    ◉
-  </div>)
+    src={`assets/character.svg`}
+    alt='Character'
+  />
+  )
 };
 
 export default Character;

@@ -37,9 +37,23 @@ const Map = () => {
       }
     }
   );
+    
+  const collideCheck = (newPosition) => {
+    if (gameMap[newPosition.y][newPosition.x]=== 'w') {
+      return 1
+    } else {
+      return 0
+    }
+  };
 
   const heroPositionChange = (x, y) => {
-    setHeroPosition({ ...heroPosition, position: {x: heroPosition.position.x + x, y: heroPosition.position.y + y}, })
+    const newPosition = {
+      x: heroPosition.position.x + x,
+      y: heroPosition.position.y + y,
+    }
+    if (!collideCheck(newPosition)) {
+      setHeroPosition({ ...heroPosition, position: {x: newPosition.x, y: newPosition.y}, })
+    }
   };
 
   useEffect(() => {

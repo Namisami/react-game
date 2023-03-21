@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import Character from "./components/Character/Character";
+import React from "react";
 import Map from "./components/Map/Map";
 
 import './App.css'

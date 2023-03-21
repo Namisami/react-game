@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import './Character.css'
 
-const Character = ({ onCharacterChange, heroPosition }) => {
+const Character = ({ onCharacterChange, heroPosition, isNpc }) => {
   const move = (e) => {
     const keyPressed = e.key;
     const moveKeys = {
@@ -17,6 +17,9 @@ const Character = ({ onCharacterChange, heroPosition }) => {
   }
 
   useEffect(() => {
+    if (isNpc) {
+      return
+    }
     document.addEventListener("keydown", move);
     return () => {
       document.removeEventListener("keydown", move);

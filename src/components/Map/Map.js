@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 
-import Character from '../Character/Character';
+import Character from '../Characters/Character/Character';
+import Player from '../Characters/Player/Player';
 
 import './Map.css'
 
 
 const gameMap = [
-  ["w", "w", "w", "w", "w"],
-  ["w", "f", "f", "f" ,"w"],
-  ["w", "f", "sp", "f" ,"w"],
-  ["w", "f", "f", "f" ,"w"],
-  ["w", "w", "w", "w", "w"]
+  ["w", "w", "w", "w", "w", "w", "w", "w"],
+  ["w", "f", "f", "f", "w", "f", "f", "w"],
+  ["w", "f", "f", "f" ,"f", "f", "f", "w"],
+  ["w", "w", "f", "f" ,"w", "f", "n", "w"],
+  ["w", "w", "f", "f" ,"w", "w", "f", "w"],
+  ["w", "w", "w", "w", "w", "w", "w", "w"]
 ]
 
 const mapDict = {
@@ -26,6 +28,10 @@ const mapDict = {
     path: "floor.svg",
     description: "Start position of player"
   },
+  "n": {
+    path: "floor.svg",
+    description: "Floor under the character"
+  }
 }
 
 const Map = () => {
@@ -39,7 +45,7 @@ const Map = () => {
   );
     
   const collideCheck = (newPosition) => {
-    if (gameMap[newPosition.y][newPosition.x]=== 'w') {
+    if (gameMap[newPosition.y][newPosition.x]=== 'w' || gameMap[newPosition.y][newPosition.x]=== 'n') {
       return 1
     } else {
       return 0
@@ -58,16 +64,32 @@ const Map = () => {
 
   useEffect(() => {
   })
-  const renderBlocks = gameMap.map((row) => {
+  const renderBlocks = gameMap.map((row, index) => {
     return (
-      <div className='row'>
-        { row.map((block) => {
+      // Key must be NOT index; just for test
+      <div key={ index } className='row'>
+        { row.map((block, bIndex) => {
           return (
-            <img 
-              className='block' 
-              src={`assets/${mapDict[block].path}`} 
-              alt={ mapDict[block].description } 
-            />
+            <React.Fragment>
+              { block === "n" &&
+                <Character 
+                  heroPosition={
+                  {
+                    'position': {
+                      'x': bIndex, 
+                      'y': index
+                    }
+                  }}
+                  isNpc={ true }
+                />
+              } 
+              <img 
+                key={ `row${bIndex}` }
+                className='block' 
+                src={`assets/${mapDict[block].path}`} 
+                alt={ mapDict[block].description } 
+              />
+            </React.Fragment>
           )
         })}
       </div>
@@ -77,10 +99,10 @@ const Map = () => {
   return (
     <div className='map'>
       { renderBlocks }
-      <Character
-                onCharacterChange={ ([x, y]) => heroPositionChange(x, y) }
-                heroPosition={ heroPosition }
-              />
+      <Player 
+        onPlayerMove={ (x, y) => heroPositionChange(x, y) }
+        heroPosition={ heroPosition }
+      />
     </div>
   )
 }

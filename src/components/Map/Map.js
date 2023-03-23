@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import Character from '../Characters/Character/Character';
+import NPC from '../Characters/NPC/NPC';
 import Player from '../Characters/Player/Player';
 
 import './Map.css'
@@ -70,21 +70,16 @@ const Map = () => {
       <div key={ index } className='row'>
         { row.map((block, bIndex) => {
           return (
-            <React.Fragment>
+            <React.Fragment key={ `row${bIndex}` }>
               { block === "n" &&
-                <Character 
-                  heroPosition={
-                  {
-                    'position': {
-                      'x': bIndex, 
-                      'y': index
-                    }
+                <NPC 
+                  position={{
+                    'x': bIndex, 
+                    'y': index
                   }}
-                  isNpc={ true }
                 />
               } 
               <img 
-                key={ `row${bIndex}` }
                 className='block' 
                 src={`assets/${mapDict[block].path}`} 
                 alt={ mapDict[block].description } 
@@ -101,7 +96,7 @@ const Map = () => {
       { renderBlocks }
       <Player 
         onPlayerMove={ (x, y) => heroPositionChange(x, y) }
-        heroPosition={ heroPosition }
+        heroPosition={ heroPosition.position }
       />
     </div>
   )

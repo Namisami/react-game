@@ -5,7 +5,7 @@ const Player = ({heroPosition, onPlayerMove}) => {
   return (
     <Character
       onCharacterChange={ ([x, y]) => onPlayerMove(x, y) }
-      heroPosition={ heroPosition }
+      position={ heroPosition }
     />
   )  
 };

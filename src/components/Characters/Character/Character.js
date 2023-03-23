@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import './Character.css'
 
-const Character = ({ onCharacterChange, heroPosition, isNpc }) => {
+const Character = ({ onCharacterChange, position, isNpc }) => {
   const move = (e) => {
     const keyPressed = e.key;
     const moveKeys = {
@@ -30,8 +30,8 @@ const Character = ({ onCharacterChange, heroPosition, isNpc }) => {
   <img 
     className="character"
     style={{
-      left: `${heroPosition.position.x * process.env.REACT_APP_SYMBOL_SIZE}px`, 
-      top: `${heroPosition.position.y * process.env.REACT_APP_SYMBOL_SIZE}px`
+      left: `${position.x * process.env.REACT_APP_SYMBOL_SIZE}px`, 
+      top: `${position.y * process.env.REACT_APP_SYMBOL_SIZE}px`
     }}
     src={`assets/character.svg`}
     alt='Character'

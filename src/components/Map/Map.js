@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import NPC from '../Characters/NPC/NPC';
 import Player from '../Characters/Player/Player';
+import Dialog from '../Dialog/Dialog';
 
 import './Map.css'
 
@@ -40,7 +41,8 @@ const Map = () => {
       'position': {
         'x': 2,
         'y': 2,
-      }
+      },
+      'isBusy': false
     }
   );
     
@@ -63,6 +65,7 @@ const Map = () => {
       gameMap[heroPosition.position.y][heroPosition.position.x - 1] === 'n'
     ) {
       console.log('interact')
+      setHeroPosition({ ...heroPosition, isBusy: true })
     }
   }
 
@@ -106,14 +109,19 @@ const Map = () => {
   })
   
   return (
-    <div className='map'>
-      { renderBlocks }
-      <Player 
-        onPlayerMove={ (x, y) => heroPositionChange(x, y) }
-        onInteract={ interactCheck }
-        heroPosition={ heroPosition.position }
-      />
-    </div>
+    <>
+      <div className='map'>
+        { renderBlocks }
+        <Player 
+          onPlayerMove={ (x, y) => heroPositionChange(x, y) }
+          onInteract={ interactCheck }
+          heroPosition={ heroPosition.position }
+        />
+      </div>
+      { heroPosition.isBusy &&
+        <Dialog />
+      }
+    </>
   )
 }
 

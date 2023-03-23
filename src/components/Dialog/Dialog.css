@@ -1,0 +1,8 @@
+.dialog {
+  position: fixed;
+  bottom: 0;
+  height: 150px;
+  width: 100%;
+  background: lightblue;
+  opacity: 0.5;
+}

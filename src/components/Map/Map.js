@@ -52,6 +52,20 @@ const Map = () => {
     }
   };
 
+  const interactCheck = () => {
+    console.log(heroPosition.position)
+    if (
+      gameMap[heroPosition.position.y + 1][heroPosition.position.x] === 'n' ||
+      gameMap[heroPosition.position.y + 1][heroPosition.position.x] === 'n' ||
+      gameMap[heroPosition.position.y - 1][heroPosition.position.x + 1] === 'n' ||
+      gameMap[heroPosition.position.y - 1][heroPosition.position.x - 1] === 'n' ||
+      gameMap[heroPosition.position.y][heroPosition.position.x + 1] === 'n' ||
+      gameMap[heroPosition.position.y][heroPosition.position.x - 1] === 'n'
+    ) {
+      console.log('interact')
+    }
+  }
+
   const heroPositionChange = (x, y) => {
     const newPosition = {
       x: heroPosition.position.x + x,
@@ -96,6 +110,7 @@ const Map = () => {
       { renderBlocks }
       <Player 
         onPlayerMove={ (x, y) => heroPositionChange(x, y) }
+        onInteract={ interactCheck }
         heroPosition={ heroPosition.position }
       />
     </div>

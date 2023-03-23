@@ -2,17 +2,27 @@ import React, { useEffect } from 'react';
 
 import './Character.css'
 
-const Character = ({ onCharacterChange, position, isNpc }) => {
-  const move = (e) => {
-    const keyPressed = e.key;
-    const moveKeys = {
-      'ArrowUp' : [0, -1],
-      'ArrowRight': [1, 0],
-      'ArrowDown': [0, 1],
-      'ArrowLeft': [-1, 0]
-    };
+const moveKeys = {
+  'ArrowUp' : [0, -1],
+  'ArrowRight': [1, 0],
+  'ArrowDown': [0, 1],
+  'ArrowLeft': [-1, 0]
+};
+
+const Character = ({ 
+    onCharacterChange, 
+    position, 
+    isNpc,
+    onInteract
+  }) => {
+  const keyListening = (e) => {
+    const [keyPressed, codePressed] = [e.key, e.code];
     if (Object.keys(moveKeys).includes(keyPressed)) {
+      // Move
       onCharacterChange(moveKeys[keyPressed]);
+    } else if (codePressed === 'KeyE') {
+      // Interact
+      onInteract();
     };
   }
 
@@ -20,9 +30,10 @@ const Character = ({ onCharacterChange, position, isNpc }) => {
     if (isNpc) {
       return
     }
-    document.addEventListener("keydown", move);
+    document.addEventListener("keydown", keyListening);
+    document.addEventListener("keydown", keyListening);
     return () => {
-      document.removeEventListener("keydown", move);
+      document.removeEventListener("keydown", keyListening);
     };
   });
 

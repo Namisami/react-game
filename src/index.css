@@ -1,3 +1,13 @@
+@font-face {
+  font-family: 'Pixeleum 48';
+  src: url('./fonts/Pixeleum/pixeleum-48.ttf');
+}
+
+html {
+  font-family: 'Pixeleum 48', sans-serif;
+  font-size: 12px;
+}
+
 body {
   margin: 0;
 }

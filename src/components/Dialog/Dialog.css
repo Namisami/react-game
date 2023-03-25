@@ -7,10 +7,6 @@
   width: 80%;
   background: white;
 }
-.dialog__character {
-  flex: 1;
-  border: 1px solid red;
-}
 .dialog__content {
   display: flex;
   flex-direction: column;
@@ -19,7 +15,7 @@
 }
 .dialog__text {
   overflow-y: scroll;
-  padding: 5px;
+  padding: 2.5px 5px;
   height: 100%;
 }
 .dialog__choices {

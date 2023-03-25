@@ -55,7 +55,6 @@ const Map = () => {
   };
 
   const interactCheck = () => {
-    console.log(heroPosition.position)
     if (
       gameMap[heroPosition.position.y + 1][heroPosition.position.x] === 'n' ||
       gameMap[heroPosition.position.y + 1][heroPosition.position.x] === 'n' ||
@@ -64,12 +63,14 @@ const Map = () => {
       gameMap[heroPosition.position.y][heroPosition.position.x + 1] === 'n' ||
       gameMap[heroPosition.position.y][heroPosition.position.x - 1] === 'n'
     ) {
-      console.log('interact')
       setHeroPosition({ ...heroPosition, isBusy: true })
     }
   }
 
   const heroPositionChange = (x, y) => {
+    if (heroPosition.isBusy) {
+      return
+    }
     const newPosition = {
       x: heroPosition.position.x + x,
       y: heroPosition.position.y + y,
@@ -115,11 +116,11 @@ const Map = () => {
         <Player 
           onPlayerMove={ (x, y) => heroPositionChange(x, y) }
           onInteract={ interactCheck }
-          heroPosition={ heroPosition.position }
+          heroPosition={ heroPosition }
         />
       </div>
       { heroPosition.isBusy &&
-        <Dialog />
+        <Dialog onEndBtnClick={ () => setHeroPosition({ ...heroPosition, 'isBusy': false }) }/>
       }
     </>
   )

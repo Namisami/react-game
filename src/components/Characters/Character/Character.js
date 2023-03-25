@@ -11,7 +11,8 @@ const moveKeys = {
 
 const Character = ({ 
     onCharacterChange, 
-    position, 
+    position,
+    isBusy, 
     isNpc,
     onInteract
   }) => {
@@ -27,10 +28,9 @@ const Character = ({
   }
 
   useEffect(() => {
-    if (isNpc) {
+    if (isNpc || isBusy) {
       return
     }
-    document.addEventListener("keydown", keyListening);
     document.addEventListener("keydown", keyListening);
     return () => {
       document.removeEventListener("keydown", keyListening);

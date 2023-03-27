@@ -1,10 +1,10 @@
 .dialog {
   position: fixed;
   bottom: 5px;
-  left: 10%;
+  left: 20%;
   display: flex;
   height: 150px;
-  width: 80%;
+  width: 60%;
   background: white;
 }
 .dialog__content {

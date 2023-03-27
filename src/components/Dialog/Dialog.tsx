@@ -3,7 +3,13 @@ import Portrait from '../Portrait/Portrait';
 
 import './Dialog.css';
 
-const Dialog = ({ onEndBtnClick }) => {
+interface DialogProps {
+  onEndBtnClick: () => void;
+}
+
+const Dialog = ({ 
+  onEndBtnClick 
+}: DialogProps) => {
   return (
     <div className='dialog'>
       <Portrait 

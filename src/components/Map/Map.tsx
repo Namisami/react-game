@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
-import NPC from '../Characters/NPC/NPC';
+import Npc from '../Characters/Npc/Npc';
 import Player from '../Characters/Player/Player';
 import Dialog from '../Dialog/Dialog';
 
@@ -16,20 +16,27 @@ const gameMap = [
   ["w", "w", "w", "w", "w", "w", "w", "w"]
 ]
 
-const mapDict = {
-  "w": {
+interface MapDictI {
+  [key: string]: {
+    path: string;
+    description: string;
+  }
+}
+
+const MapDict: MapDictI = {
+  w: {
     path: "wall.svg",
     description: "Cavern wall"
   },
-  "f": {
+  f: {
     path: "floor.svg",
     description: "Cavern floor"
   },
-  "sp": {
+  sp: {
     path: "floor.svg",
     description: "Start position of player"
   },
-  "n": {
+  n: {
     path: "floor.svg",
     description: "Floor under the character"
   }
@@ -46,8 +53,8 @@ const Map = () => {
     }
   );
     
-  const collideCheck = (newPosition) => {
-    if (gameMap[newPosition.y][newPosition.x]=== 'w' || gameMap[newPosition.y][newPosition.x]=== 'n') {
+  const collideCheck = ({x, y}: {x: number, y: number}) => {
+    if (gameMap[y][x]=== 'w' || gameMap[y][x]=== 'n') {
       return 1
     } else {
       return 0
@@ -67,7 +74,7 @@ const Map = () => {
     }
   }
 
-  const heroPositionChange = (x, y) => {
+  const heroPositionChange = (x: number, y: number) => {
     if (heroPosition.isBusy) {
       return
     }
@@ -80,27 +87,25 @@ const Map = () => {
     }
   };
 
-  useEffect(() => {
-  })
-  const renderBlocks = gameMap.map((row, index) => {
+  const renderBlocks = gameMap.map((row, y) => {
     return (
       // Key must be NOT index; just for test
-      <div key={ index } className='row'>
-        { row.map((block, bIndex) => {
+      <div key={ y } className='row'>
+        { row.map((block: string, x: number) => {
           return (
-            <React.Fragment key={ `row${bIndex}` }>
+            <React.Fragment key={ `row${x}` }>
               { block === "n" &&
-                <NPC 
+                <Npc
                   position={{
-                    'x': bIndex, 
-                    'y': index
+                    x: x,
+                    y: y,
                   }}
                 />
               } 
               <img 
                 className='block' 
-                src={`assets/${mapDict[block].path}`} 
-                alt={ mapDict[block].description } 
+                src={`assets/${MapDict[block].path}`} 
+                alt={ MapDict[block].description } 
               />
             </React.Fragment>
           )

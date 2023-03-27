@@ -14,9 +14,8 @@ const Npc = ({
   return (
     <Character 
       isNpc={ true }
+      isBusy={ false }
       position={ position }
-      onCharacterChange={ () => console.log(1) }
-      onInteract={ () => console.log(2) }
     />
   )
 };

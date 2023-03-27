@@ -5,10 +5,6 @@ import './Character.css'
 const symbolSize: any = process.env.REACT_APP_SYMBOL_SIZE; 
 
 interface MoveKeysOption {
-  // ArrowUp: number[];
-  // ArrowRight: number[],
-  // ArrowDown: number[],
-  // ArrowLeft: number[]
   [key: string]: number[]
 }
 
@@ -24,10 +20,10 @@ interface CharacterProps {
     x: number;
     y: number;
   }
-  isBusy?: boolean;
+  isBusy: boolean;
   isNpc?: boolean;
-  onCharacterChange: (x: number, y: number) => void;
-  onInteract: () => void;
+  onCharacterChange?: (x: number, y: number) => void;
+  onInteract?: () => void;
 }
 
 const Character = ({ 
@@ -37,22 +33,22 @@ const Character = ({
     onCharacterChange, 
     onInteract
   }: CharacterProps) => {
-  const keyListening = (e: KeyboardEvent) => {
-    const [keyPressed, codePressed] = [e.key, e.code];
-    if (Object.keys(moveKeys).includes(keyPressed)) {
-      // Move
-      let [x, y] = moveKeys[keyPressed];
-      onCharacterChange(x, y);
-    } else if (codePressed === 'KeyE') {
-      // Interact
-      onInteract();
-    };
-  }
-
-  useEffect(() => {
-    if (isNpc || isBusy) {
-      return
+    const keyListening = (e: KeyboardEvent) => {
+      const [keyPressed, codePressed] = [e.key, e.code];
+      if (Object.keys(moveKeys).includes(keyPressed)) {
+        // Move
+        let [x, y] = moveKeys[keyPressed];
+        onCharacterChange!(x, y);
+      } else if (codePressed === 'KeyE') {
+        // Interact
+        onInteract!();
+      };
     }
+    
+    useEffect(() => {
+      if (isNpc || isBusy) {
+        return
+      }
     document.addEventListener("keydown", keyListening);
     return () => {
       document.removeEventListener("keydown", keyListening);

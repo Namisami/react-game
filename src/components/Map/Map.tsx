@@ -3,13 +3,14 @@ import React, { useState } from 'react';
 import Npc from '../Characters/Npc/Npc';
 import Player from '../Characters/Player/Player';
 import Dialog from '../Dialog/Dialog';
+import Monster from '../Monster/Monster';
 
 import './Map.css'
 
 
 const gameMap = [
   ["w", "w", "w", "w", "w", "w", "w", "w"],
-  ["w", "f", "f", "f", "w", "f", "f", "w"],
+  ["w", "f", "f", "f", "w", "f", "m", "w"],
   ["w", "f", "f", "f" ,"f", "f", "f", "w"],
   ["w", "w", "f", "f" ,"w", "f", "n", "w"],
   ["w", "w", "f", "f" ,"w", "w", "f", "w"],
@@ -39,6 +40,10 @@ const MapDict: MapDictI = {
   n: {
     path: "floor.svg",
     description: "Floor under the character"
+  },
+  m: {
+    path: "floor.svg",
+    description: "Floor under the evil-evil monster"
   }
 }
 
@@ -54,11 +59,7 @@ const Map = () => {
   );
     
   const collideCheck = ({x, y}: {x: number, y: number}) => {
-    if (gameMap[y][x]=== 'w' || gameMap[y][x]=== 'n') {
-      return 1
-    } else {
-      return 0
-    }
+    return gameMap[y][x]=== 'w' || gameMap[y][x]=== 'n' || gameMap[y][x] === 'm' ? true : false
   };
 
   const interactCheck = () => {
@@ -97,11 +98,19 @@ const Map = () => {
               { block === "n" &&
                 <Npc
                   position={{
-                    x: x,
-                    y: y,
+                    x,
+                    y
                   }}
                 />
               } 
+              { block === "m" &&
+                <Monster 
+                  position={{
+                    x,
+                    y
+                  }}
+                />
+              }
               <img 
                 className='block' 
                 src={`assets/${MapDict[block].path}`} 

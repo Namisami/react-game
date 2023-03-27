@@ -11,6 +11,7 @@ interface PlayerProps {
   }
   onPlayerMove: (x: number, y: number) => void;
   onInteract: () => void;
+  onAttack: () => void;
 }
 
 const Player = ({
@@ -19,14 +20,16 @@ const Player = ({
     isBusy 
   }, 
   onPlayerMove, 
-  onInteract
+  onInteract,
+  onAttack
 }: PlayerProps) => {
   return (
     <Character
+      position={ position }
+      isBusy={ isBusy }
       onCharacterChange={ (x, y) => onPlayerMove(x, y) }
       onInteract={ onInteract }
-      isBusy={ isBusy }
-      position={ position }
+      onAttack={ onAttack }
     />
   )  
 };

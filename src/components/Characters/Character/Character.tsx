@@ -24,6 +24,7 @@ interface CharacterProps {
   isNpc?: boolean;
   onCharacterChange?: (x: number, y: number) => void;
   onInteract?: () => void;
+  onAttack?: () => void;
 }
 
 const Character = ({ 
@@ -31,7 +32,8 @@ const Character = ({
     isBusy, 
     isNpc,
     onCharacterChange, 
-    onInteract
+    onInteract,
+    onAttack
   }: CharacterProps) => {
     const keyListening = (e: KeyboardEvent) => {
       const [keyPressed, codePressed] = [e.key, e.code];
@@ -42,6 +44,9 @@ const Character = ({
       } else if (codePressed === 'KeyE') {
         // Interact
         onInteract!();
+      } else if (codePressed === 'KeyA') {
+        // Attack
+        onAttack!();
       };
     }
     

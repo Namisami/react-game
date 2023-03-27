@@ -70,19 +70,23 @@ const Map = () => {
     position.current = heroPosition.position
   }, [heroPosition.position])
 
-  const collideCheck = ({x, y}: {x: number, y: number}) => {
+  const collideCheck = ({x, y}: Position) => {
     return gameMap[y][x]=== 'w' || gameMap[y][x]=== 'n' || gameMap[y][x] === 'm' ? true : false
   };
 
   const interactCheck = () => {
     if (
-      gameMap[heroPosition.position.y + 1][heroPosition.position.x] === 'n' ||
+      // Position check
+      (gameMap[heroPosition.position.y + 1][heroPosition.position.x] === 'n' ||
       gameMap[heroPosition.position.y + 1][heroPosition.position.x] === 'n' ||
       gameMap[heroPosition.position.y - 1][heroPosition.position.x + 1] === 'n' ||
       gameMap[heroPosition.position.y - 1][heroPosition.position.x - 1] === 'n' ||
       gameMap[heroPosition.position.y][heroPosition.position.x + 1] === 'n' ||
-      gameMap[heroPosition.position.y][heroPosition.position.x - 1] === 'n'
-    ) {
+      gameMap[heroPosition.position.y][heroPosition.position.x - 1] === 'n') &&
+      // Busy check
+      (heroPosition.isBusy &&
+      !heroPosition.isAttack)
+      ) {
       setHeroPosition({ ...heroPosition, position: position.current, isBusy: true })
     }
   }

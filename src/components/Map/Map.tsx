@@ -6,8 +6,8 @@ import Player from '../Characters/Player/Player';
 import Dialog from '../Dialog/Dialog';
 import Monster from '../Monster/Monster';
 
-import './Map.css'
-
+import './Map.css';
+import MapDict from '../../blocks.json';
 
 const gameMap = [
   ["w", "w", "w", "w", "w", "w", "w", "w"],
@@ -18,37 +18,7 @@ const gameMap = [
   ["w", "w", "w", "w", "w", "w", "w", "w"]
 ]
 
-interface MapDictI {
-  [key: string]: {
-    path: string;
-    description: string;
-  }
-}
-
-const MapDict: MapDictI = {
-  w: {
-    path: "wall.svg",
-    description: "Cavern wall"
-  },
-  f: {
-    path: "floor.svg",
-    description: "Cavern floor"
-  },
-  sp: {
-    path: "floor.svg",
-    description: "Start position of player"
-  },
-  n: {
-    path: "floor.svg",
-    description: "Floor under the character"
-  },
-  m: {
-    path: "floor.svg",
-    description: "Floor under the evil-evil monster"
-  }
-}
-
-interface Position {
+export interface Position {
   x: number;
   y: number;
 }
@@ -84,7 +54,7 @@ const Map = () => {
       gameMap[heroPosition.position.y][heroPosition.position.x + 1] === 'n' ||
       gameMap[heroPosition.position.y][heroPosition.position.x - 1] === 'n') &&
       // Busy check
-      (heroPosition.isBusy &&
+      (!heroPosition.isBusy &&
       !heroPosition.isAttack)
       ) {
       setHeroPosition({ ...heroPosition, position: position.current, isBusy: true })
@@ -103,7 +73,7 @@ const Map = () => {
     }, 1000)
   }
 
-  const heroPositionChange = (x: number, y: number) => {
+  const heroPositionChange = ({x, y}: Position) => {
     if (heroPosition.isBusy) {
       return
     }
@@ -141,8 +111,8 @@ const Map = () => {
               }
               <img 
                 className='block' 
-                src={`assets/${MapDict[block].path}`} 
-                alt={ MapDict[block].description } 
+                src={`assets/${MapDict[block as keyof typeof MapDict].path}`} 
+                alt={ MapDict[block as keyof typeof MapDict].description } 
               />
             </React.Fragment>
           )
@@ -157,7 +127,7 @@ const Map = () => {
         { renderBlocks }
         <Player 
           heroPosition={ heroPosition }
-          onPlayerMove={ (x, y) => heroPositionChange(x, y) }
+          onPlayerMove={ ({x, y}) => heroPositionChange({x, y}) }
           onInteract={ interactCheck }
           onAttack={ attack }
         />

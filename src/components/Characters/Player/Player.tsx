@@ -1,5 +1,6 @@
 import React from 'react';
 import Character from '../Character/Character';
+import { Position } from '../../Map/Map'
 
 interface PlayerProps {
   heroPosition: {
@@ -9,7 +10,7 @@ interface PlayerProps {
     }
     isBusy: boolean;
   }
-  onPlayerMove: (x: number, y: number) => void;
+  onPlayerMove: ({x, y}: Position) => void;
   onInteract: () => void;
   onAttack: () => void;
 }
@@ -27,7 +28,7 @@ const Player = ({
     <Character
       position={ position }
       isBusy={ isBusy }
-      onCharacterChange={ (x, y) => onPlayerMove(x, y) }
+      onCharacterChange={ ({x, y}) => onPlayerMove({x, y}) }
       onInteract={ onInteract }
       onAttack={ onAttack }
     />

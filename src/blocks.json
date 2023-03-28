@@ -1,0 +1,22 @@
+{
+  "w":{
+    "path":"wall.svg",
+    "description":"Cavern wall"
+  },
+  "f":{
+    "path":"floor.svg",
+    "description":"Cavern floor"
+  },
+  "sp":{
+    "path":"floor.svg",
+    "description":"Start position of player"
+  },
+  "n":{
+    "path":"floor.svg",
+    "description":"Floor under the character"
+  },
+  "m":{
+    "path":"floor.svg",
+    "description":"Floor under the evil-evil monster"
+  }
+}

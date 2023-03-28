@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Position } from '../../Map/Map';
 
 import './Character.css'
 
@@ -16,13 +17,10 @@ const moveKeys: MoveKeysOption = {
 };
 
 interface CharacterProps {
-  position: {
-    x: number;
-    y: number;
-  }
+  position: Position
   isBusy: boolean;
   isNpc?: boolean;
-  onCharacterChange?: (x: number, y: number) => void;
+  onCharacterChange?: ({x, y}: Position) => void;
   onInteract?: () => void;
   onAttack?: () => void;
 }
@@ -40,7 +38,7 @@ const Character = ({
       if (Object.keys(moveKeys).includes(keyPressed)) {
         // Move
         let [x, y] = moveKeys[keyPressed];
-        onCharacterChange!(x, y);
+        onCharacterChange!({x, y});
       } else if (codePressed === 'KeyE') {
         // Interact
         onInteract!();

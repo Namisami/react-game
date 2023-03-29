@@ -2,7 +2,7 @@ import React from 'react';
 
 import './Monster.css';
 
-const symbolSize: any = process.env.REACT_APP_SYMBOL_SIZE; 
+const symbolSize = import.meta.env.VITE_SYMBOL_SIZE;
 
 interface MonsterProps {
   position: {

@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import { Position } from '../../Map/Map';
+import { Position } from '@components/Map/Map';
 
 import './Character.css'
 
-const symbolSize: any = process.env.REACT_APP_SYMBOL_SIZE; 
+const symbolSize = import.meta.env.VITE_SYMBOL_SIZE;
 
 interface MoveKeysOption {
   [key: string]: number[]

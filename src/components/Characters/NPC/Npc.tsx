@@ -1,5 +1,5 @@
 import React from 'react';
-import Character from '../Character/Character';
+import Character from '@components/Characters/Character/Character';
 
 interface NpcProps {
   position: {

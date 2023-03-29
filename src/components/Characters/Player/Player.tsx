@@ -1,6 +1,6 @@
 import React from 'react';
-import Character from '../Character/Character';
-import { Position } from '../../Map/Map'
+import Character from '@components/Characters/Character/Character';
+import { Position } from '@components/Map/Map'
 
 interface PlayerProps {
   heroPosition: {

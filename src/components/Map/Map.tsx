@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
-import Attack from '../Attack/Attack';
+import Attack from '@components/Attack/Attack';
 
-import Npc from '../Characters/Npc/Npc';
-import Player from '../Characters/Player/Player';
-import Dialog from '../Dialog/Dialog';
-import Monster from '../Monster/Monster';
+import Npc from '@components/Characters/Npc/Npc';
+import Player from '@components/Characters/Player/Player';
+import Dialog from '@components/Dialog/Dialog';
+import Monster from '@components/Monster/Monster';
 
 import './Map.css';
-import MapDict from '../../blocks.json';
+import MapDict from '@config/blocks.json';
 
 const gameMap = [
   ["w", "w", "w", "w", "w", "w", "w", "w"],
@@ -24,7 +24,7 @@ export interface Position {
 }
 
 const Map = () => {
-  const [heroPosition, setHeroPosition] = useState(
+  const [hero, setHero] = useState(
     {
       position: {
         x: 2,
@@ -34,11 +34,11 @@ const Map = () => {
       isAttack: false,
     }
   );
-  const position = useRef<Position>(heroPosition.position)
+  const position = useRef<Position>(hero.position)
     
   useEffect(() => {
-    position.current = heroPosition.position
-  }, [heroPosition.position])
+    position.current = hero.position
+  }, [hero.position])
 
   const collideCheck = ({x, y}: Position) => {
     return gameMap[y][x]=== 'w' || gameMap[y][x]=== 'n' || gameMap[y][x] === 'm' ? true : false
@@ -47,42 +47,42 @@ const Map = () => {
   const interactCheck = () => {
     if (
       // Position check
-      (gameMap[heroPosition.position.y + 1][heroPosition.position.x] === 'n' ||
-      gameMap[heroPosition.position.y + 1][heroPosition.position.x] === 'n' ||
-      gameMap[heroPosition.position.y - 1][heroPosition.position.x + 1] === 'n' ||
-      gameMap[heroPosition.position.y - 1][heroPosition.position.x - 1] === 'n' ||
-      gameMap[heroPosition.position.y][heroPosition.position.x + 1] === 'n' ||
-      gameMap[heroPosition.position.y][heroPosition.position.x - 1] === 'n') &&
+      (gameMap[hero.position.y + 1][hero.position.x] === 'n' ||
+      gameMap[hero.position.y + 1][hero.position.x] === 'n' ||
+      gameMap[hero.position.y - 1][hero.position.x + 1] === 'n' ||
+      gameMap[hero.position.y - 1][hero.position.x - 1] === 'n' ||
+      gameMap[hero.position.y][hero.position.x + 1] === 'n' ||
+      gameMap[hero.position.y][hero.position.x - 1] === 'n') &&
       // Busy check
-      (!heroPosition.isBusy &&
-      !heroPosition.isAttack)
+      (!hero.isBusy &&
+      !hero.isAttack)
       ) {
-      setHeroPosition({ ...heroPosition, position: position.current, isBusy: true })
+      setHero({ ...hero, position: position.current, isBusy: true })
     }
   }
 
   const attack = () => {
     // Need to check more on abuse
-    if (heroPosition.isAttack) {
+    if (hero.isAttack) {
       return
     }
-    setHeroPosition({ ...heroPosition, isAttack: true })
+    setHero({ ...hero, isAttack: true })
     const timeoutId = setTimeout(() => {
-      setHeroPosition({ ...heroPosition, position: position.current, isAttack: false });
+      setHero({ ...hero, position: position.current, isAttack: false });
       clearTimeout(timeoutId)
     }, 1000)
   }
 
   const heroPositionChange = ({x, y}: Position) => {
-    if (heroPosition.isBusy) {
+    if (hero.isBusy) {
       return
     }
     const newPosition = {
-      x: heroPosition.position.x + x,
-      y: heroPosition.position.y + y,
+      x: hero.position.x + x,
+      y: hero.position.y + y,
     }
     if (!collideCheck(newPosition)) {
-      setHeroPosition({ ...heroPosition, position: {x: newPosition.x, y: newPosition.y}, })
+      setHero({ ...hero, position: {x: newPosition.x, y: newPosition.y}, })
     }
   };
 
@@ -126,19 +126,19 @@ const Map = () => {
       <div className='map'>
         { renderBlocks }
         <Player 
-          heroPosition={ heroPosition }
+          heroPosition={ hero }
           onPlayerMove={ ({x, y}) => heroPositionChange({x, y}) }
           onInteract={ interactCheck }
           onAttack={ attack }
         />
-        { heroPosition.isAttack &&
+        { hero.isAttack &&
           <Attack 
-            position={ heroPosition.position }
+            position={ hero.position }
           />
         }
       </div>
-      { heroPosition.isBusy &&
-        <Dialog onEndBtnClick={ () => setHeroPosition({ ...heroPosition, 'isBusy': false }) }/>
+      { hero.isBusy &&
+        <Dialog onEndBtnClick={ () => setHero({ ...hero, 'isBusy': false }) }/>
       }
     </>
   )

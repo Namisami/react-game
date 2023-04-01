@@ -5,8 +5,16 @@ import './App.css'
 
 function App() {
   return (
-    <div className="App">
-      <Map />
+    <div className="app">
+      <div className="side-block">
+        There will be some data
+      </div>
+      <div className="main-block">
+        <Map />
+      </div>
+      <div className="side-block">
+        There will be some data
+      </div>
     </div>
   );
 }

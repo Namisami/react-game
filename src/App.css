@@ -1,0 +1,14 @@
+.app {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.side-block {
+  flex: 1;
+}
+
+.main-block {
+  flex: 5;
+  margin: auto;
+}

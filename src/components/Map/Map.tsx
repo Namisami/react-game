@@ -6,19 +6,14 @@ import Player from '@components/Characters/Player/Player';
 import Dialog from '@components/Dialog/Dialog';
 import Monster from '@components/Monster/Monster';
 
-import { loadMap } from '@utils/loadMap';
+import MapDict from '@config/blocks.json';
+// import MobDict from '@config/mobs.json';
+import { Position } from '@config/types/Position';
 
-const gameMap: Map<string, { type: string }> = loadMap();
+import { gameMap } from '@utils/loadMap';
+import { gameNpcs } from '@utils/loadNpcs';
 
 import './Map.css';
-
-// import MobDict from '@config/mobs.json';
-import MapDict from '@config/blocks.json';
-
-export interface Position {
-  x: number;
-  y: number;
-}
 
 const Map = () => {
   const [hero, setHero] = useState(
@@ -52,11 +47,14 @@ const Map = () => {
   }
 
   const collideCheck = ({x, y}: Position) => {
-    let nextBlockType = gameMap.get(`${x},${y}`)?.type
-    if (typeof nextBlockType === 'undefined') {
-      throw new Error('You reach the end of the world')
+    const differentMapsCheck = (mapType: Map<string, { type: string }>) => {
+      let nextBlockType = mapType.get(`${x},${y}`)?.type
+      if (typeof nextBlockType === 'undefined') {
+        return false
+      }
+      return ['w', 'n', 'm'].includes(nextBlockType) ? true : false
     }
-    return ['w', 'n', 'm'].includes(nextBlockType) ? true : false
+    return differentMapsCheck(gameMap) || differentMapsCheck(gameNpcs)
   };
 
   const interactCheck = () => {
@@ -115,10 +113,21 @@ const Map = () => {
     )
   })
   
+  const renderNpcs = Array.from(gameNpcs).map(([npcPosition]) => {
+    let [x, y] = npcPosition.split(',').map(el => parseInt(el));
+    return (
+      <Npc
+        key={`${x}${y}`} 
+        position={{x, y}} 
+      />
+    )
+  })
+
   return (
     <>
       <div className='map'>
         { renderBlocks }
+        { renderNpcs }
         <Player 
           heroPosition={ hero }
           onPlayerMove={ ({x, y}) => heroPositionChange({x, y}) }

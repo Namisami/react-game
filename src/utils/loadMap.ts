@@ -1,12 +1,17 @@
-import MapObjectJSON from '@config/map.json';
+import _Map from '@config/map.json';
 
-const MapObject: { [key: string]: { type: string } } = MapObjectJSON.map;
+interface MapObject {
+  [key: string]: { type: string }
+}
 
-export const loadMap = () => {
+const map = _Map as unknown as MapObject
+
+const loadMap = () => {
   const gameMap: Map<string, { type: string }> = new Map()
-  for (const key in MapObject) {
-    // let blockPosition = key.split(',').map(el => parseInt(el))
-    gameMap.set(key, MapObject[key])
+  for (const key in map) {
+    gameMap.set(key, map[key])
   }
   return gameMap
 }
+
+export const gameMap: Map<string, { type: string }> = loadMap();

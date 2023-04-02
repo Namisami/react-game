@@ -6,21 +6,14 @@ import Player from '@components/Characters/Player/Player';
 import Dialog from '@components/Dialog/Dialog';
 import Monster from '@components/Monster/Monster';
 
+import { loadMap } from '@utils/loadMap';
+
+const gameMap: Map<string, { type: string }> = loadMap();
+
 import './Map.css';
 
-import MapDict from '@config/blocks.json';
-import MapObject from '@config/map.json';
-const gameMap: { position: number[], type: string }[] = MapObject.map;
 // import MobDict from '@config/mobs.json';
-
-// const gameMap = [
-//   ["w", "w", "w", "w", "w", "w", "w", "w"],
-//   ["w", "f", "f", "f", "w", "f", "m", "w"],
-//   ["w", "f", "f", "f" ,"f", "f", "f", "w"],
-//   ["w", "w", "f", "f" ,"w", "f", "n", "w"],
-//   ["w", "w", "f", "f" ,"w", "w", "f", "w"],
-//   ["w", "w", "w", "w", "w", "w", "w", "w"]
-// ]
+import MapDict from '@config/blocks.json';
 
 export interface Position {
   x: number;
@@ -58,26 +51,29 @@ const Map = () => {
     )
   }
 
-  // const collideCheck = ({x, y}: Position) => {
-  //   return gameMap[y][x]=== 'w' || gameMap[y][x]=== 'n' || gameMap[y][x] === 'm' ? true : false
-  // };
+  const collideCheck = ({x, y}: Position) => {
+    let nextBlockType = gameMap.get(`${x},${y}`)?.type
+    if (typeof nextBlockType === 'undefined') {
+      throw new Error('You reach the end of the world')
+    }
+    return ['w', 'n', 'm'].includes(nextBlockType) ? true : false
+  };
 
-  // const interactCheck = () => {
-  //   if (
-  //     // Position check
-  //     (gameMap[hero.position.y + 1][hero.position.x] === 'n' ||
-  //     gameMap[hero.position.y + 1][hero.position.x] === 'n' ||
-  //     gameMap[hero.position.y - 1][hero.position.x + 1] === 'n' ||
-  //     gameMap[hero.position.y - 1][hero.position.x - 1] === 'n' ||
-  //     gameMap[hero.position.y][hero.position.x + 1] === 'n' ||
-  //     gameMap[hero.position.y][hero.position.x - 1] === 'n') &&
-  //     // Busy check
-  //     (!hero.isBusy &&
-  //     !hero.isAttack)
-  //     ) {
-  //     setHero({ ...hero, position: position.current, isBusy: true })
-  //   }
-  // }
+  const interactCheck = () => {
+    let {x, y} = hero.position;
+    if (
+      // Position check
+      (gameMap.get(`${x + 1},${y}`)?.type === 'n' ||
+      gameMap.get(`${x - 1},${y}`)?.type ==='n' ||
+      gameMap.get(`${x},${y + 1}`)?.type === 'n' ||
+      gameMap.get(`${x},${y - 1}`)?.type === 'n') &&
+      // Busy check
+      (!hero.isBusy &&
+      !hero.isAttack)
+      ) {
+      setHero({ ...hero, position: position.current, isBusy: true })
+    }
+  }
 
   const attack = () => {
     // Need to check more on abuse
@@ -91,24 +87,21 @@ const Map = () => {
     }, 1000)
   }
 
-  // const heroPositionChange = ({x, y}: Position) => {
-  //   if (hero.isBusy) {
-  //     return
-  //   }
-  //   const newPosition = {
-  //     x: hero.position.x + x,
-  //     y: hero.position.y + y,
-  //   }
-  //   if (!collideCheck(newPosition)) {
-  //     setHero({ ...hero, position: {x: newPosition.x, y: newPosition.y}, })
-  //   }
-  // };
+  const heroPositionChange = ({x, y}: Position) => {
+    if (hero.isBusy) {
+      return
+    }
+    const newPosition = {
+      x: hero.position.x + x,
+      y: hero.position.y + y,
+    }
+    if (!collideCheck(newPosition)) {
+      setHero({ ...hero, position: {x: newPosition.x, y: newPosition.y}, })
+    }
+  };
 
-  
-
-  const renderBlocks = gameMap.map((block) => {
-    const [x, y] = block.position;
-    const blockType = block.type;
+  const renderBlocks = Array.from(gameMap).map(([blockPosition, { type: blockType }]) => {
+    let [x, y] = blockPosition.split(',').map(el => parseInt(el));
     return (
       <img key={`${x}${y}`} 
         className='block' 
@@ -120,50 +113,18 @@ const Map = () => {
         alt={ MapDict[blockType as keyof typeof MapDict].description } 
       />
     )
-    // return (
-    //   // Key must be NOT index; just for test
-    //   <div key={ y } className='row'>
-    //     { row.map((block: string, x: number) => {
-    //       return (
-    //         <React.Fragment key={ `row${x}` }>
-    //           { block === "n" &&
-    //             <Npc
-    //               position={{
-    //                 x,
-    //                 y
-    //               }}
-    //             />
-    //           } 
-    //           { block === "m" &&
-    //             <Monster 
-    //               position={{
-    //                 x,
-    //                 y
-    //               }}
-    //             />
-    //           }
-    //           <img 
-    //             className='block' 
-    //             src={`assets/${MapDict[block as keyof typeof MapDict].path}`} 
-    //             alt={ MapDict[block as keyof typeof MapDict].description } 
-    //           />
-    //         </React.Fragment>
-    //       )
-    //     })}
-    //   </div>
-    // )
   })
   
   return (
     <>
       <div className='map'>
         { renderBlocks }
-        {/* <Player 
+        <Player 
           heroPosition={ hero }
           onPlayerMove={ ({x, y}) => heroPositionChange({x, y}) }
           onInteract={ interactCheck }
           onAttack={ attack }
-        /> */}
+        />
         { hero.isAttack &&
           <Attack 
             position={ hero.position }

@@ -21,7 +21,7 @@ interface CharacterProps {
   isNpc?: boolean;
   onCharacterChange?: ({x, y}: Position) => void;
   onInteract?: () => void;
-  onAttack?: () => void;
+  onAttack?: (isAttack: boolean) => void;
 }
 
 const Character = ({ 
@@ -40,11 +40,19 @@ const Character = ({
         onCharacterChange!({x, y});
       } else if (codePressed === 'KeyE') {
         // Interact
-        onInteract!();
+        onInteract!()
       } else if (codePressed === 'KeyA') {
         // Attack
-        onAttack!();
+        onAttack!(true)
       };
+    }
+
+    const mouseListening = (e: MouseEvent) => {
+      if (e.button === 0 && e.type==="mousedown") {
+        onAttack!(true)
+      } else if (e.button === 0 && e.type==="mouseup"){
+        onAttack!(false)
+      }
     }
     
     useEffect(() => {
@@ -52,8 +60,12 @@ const Character = ({
         return
       }
     document.addEventListener("keydown", keyListening);
+    document.addEventListener("mousedown", mouseListening);
+    document.addEventListener("mouseup", mouseListening);
     return () => {
       document.removeEventListener("keydown", keyListening);
+      document.removeEventListener("mousedown", mouseListening);
+      document.removeEventListener("mouseup", mouseListening);
     };
   });
 

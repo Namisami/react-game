@@ -10,5 +10,6 @@
 
 .main-block {
   flex: 5;
-  margin: auto;
+  cursor: crosshair;
+  display: flex;
 }

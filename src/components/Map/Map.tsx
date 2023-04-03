@@ -61,10 +61,10 @@ const Map = () => {
     let {x, y} = hero.position;
     if (
       // Position check
-      (gameMap.get(`${x + 1},${y}`)?.type === 'n' ||
-      gameMap.get(`${x - 1},${y}`)?.type ==='n' ||
-      gameMap.get(`${x},${y + 1}`)?.type === 'n' ||
-      gameMap.get(`${x},${y - 1}`)?.type === 'n') &&
+      (gameNpcs.get(`${x + 1},${y}`)?.type === 'n' ||
+      gameNpcs.get(`${x - 1},${y}`)?.type ==='n' ||
+      gameNpcs.get(`${x},${y + 1}`)?.type === 'n' ||
+      gameNpcs.get(`${x},${y - 1}`)?.type === 'n') &&
       // Busy check
       (!hero.isBusy &&
       !hero.isAttack)
@@ -73,16 +73,8 @@ const Map = () => {
     }
   }
 
-  const attack = () => {
-    // Need to check more on abuse
-    if (hero.isAttack) {
-      return
-    }
-    setHero({ ...hero, isAttack: true })
-    const timeoutId = setTimeout(() => {
-      setHero({ ...hero, position: position.current, isAttack: false });
-      clearTimeout(timeoutId)
-    }, 1000)
+  const attack = (isAttack: boolean) => {
+    setHero({ ...hero, isAttack: isAttack })
   }
 
   const heroPositionChange = ({x, y}: Position) => {
@@ -132,7 +124,7 @@ const Map = () => {
           heroPosition={ hero }
           onPlayerMove={ ({x, y}) => heroPositionChange({x, y}) }
           onInteract={ interactCheck }
-          onAttack={ attack }
+          onAttack={ (isAttack) => attack(isAttack) }
         />
         { hero.isAttack &&
           <Attack 

@@ -1,11 +1,10 @@
 import React from 'react';
+
 import Character from '@components/Characters/Character/Character';
+import { Position } from '@config/types/Position';
 
 interface NpcProps {
-  position: {
-    x: number;
-    y: number;
-  }
+  position: Position
 }
 
 const Npc = ({ 

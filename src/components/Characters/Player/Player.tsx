@@ -1,25 +1,19 @@
 import React from 'react';
+
 import Character from '@components/Characters/Character/Character';
 import { Position } from '@config/types/Position'
 
 interface PlayerProps {
-  heroPosition: {
-    position: {
-      x: number;
-      y: number;
-    }
-    isBusy: boolean;
-  }
+  position: Position;
+  isBusy: boolean;
   onPlayerMove: ({x, y}: Position) => void;
   onInteract: () => void;
-  onAttack: (isAttack: boolean) => void;
+  onAttack: (isAttack: boolean, {x, y}: Position) => void;
 }
 
 const Player = ({
-  heroPosition: { 
-    position, 
-    isBusy 
-  }, 
+  position, 
+  isBusy, 
   onPlayerMove, 
   onInteract,
   onAttack
@@ -28,9 +22,10 @@ const Player = ({
     <Character
       position={ position }
       isBusy={ isBusy }
+      isNpc={ false }
       onCharacterChange={ ({x, y}) => onPlayerMove({x, y}) }
       onInteract={ onInteract }
-      onAttack={ (isAttack) => onAttack(isAttack) }
+      onAttack={ (isAttack, {x, y}) => onAttack(isAttack, {x, y}) }
     />
   )  
 };

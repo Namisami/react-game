@@ -3,7 +3,7 @@ import React from 'react';
 import './Portrait.css';
 
 interface PortraitProps {
-  // In future that field must be REQUIRED or has default value
+  // In future SRC field must be REQUIRED or has default value
   portraitSrc?: string
   className?: string
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+
 import Portrait from '@components/Portrait/Portrait';
 
 import './Dialog.css';

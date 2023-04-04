@@ -1,14 +1,13 @@
 import React from 'react';
 
+import { Position } from '@config/types/Position';
+
 import './Attack.css';
 
 interface AttackProps {
   // In future attack type would be REQUIRED
   attackType?: string;
-  position: {
-    x: number,
-    y: number
-  };
+  position: Position
 }
 
 const Attack = ({

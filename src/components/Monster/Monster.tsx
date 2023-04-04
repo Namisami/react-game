@@ -1,25 +1,26 @@
 import React from 'react';
 
+import { Position } from '@config/types/Position';
+import { symbolSize } from '@config/variables/variables';
+
 import './Monster.css';
 
-const symbolSize = import.meta.env.VITE_SYMBOL_SIZE;
-
 interface MonsterProps {
-  position: {
-    x: number,
-    y: number
-  }
+  position: Position
 };
 
 const Monster = ({
-  position
+  position: {
+    x,
+    y
+  }
 }: MonsterProps) => {
   return (
     <img 
       className='monster'
       style={{
-        left: `${position.x * symbolSize}px`, 
-        top: `${position.y * symbolSize}px`
+        left: `${x * symbolSize}px`, 
+        top: `${y * symbolSize}px`
       }}
       src='assets\monster.svg'
       alt='Monster'

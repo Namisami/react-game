@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import Attack from '@components/Attack/Attack';
 
+import Attack from '@components/Attack/Attack';
 import Npc from '@components/Characters/Npc/Npc';
 import Player from '@components/Characters/Player/Player';
 import Dialog from '@components/Dialog/Dialog';
@@ -26,8 +26,7 @@ const Map = () => {
       isAttack: false,
     }
   );
-
-  const [mobs, setMobs] = useState([])
+  // const [mobs, setMobs] = useState([])
 
   const position = useRef<Position>(hero.position)
     
@@ -35,16 +34,16 @@ const Map = () => {
     position.current = hero.position
   }, [hero.position])
 
-  const generatedMobs = () => {
-    return (
-      <Monster 
-        position={{
-          x: 6,
-          y: 1
-        }}
-      />
-    )
-  }
+  // const generatedMobs = () => {
+  //   return (
+  //     <Monster 
+  //       position={{
+  //         x: 6,
+  //         y: 1
+  //       }}
+  //     />
+  //   )
+  // }
 
   const collideCheck = ({x, y}: Position) => {
     const differentMapsCheck = (mapType: Map<string, { type: string }>) => {
@@ -73,7 +72,7 @@ const Map = () => {
     }
   }
 
-  const attack = (isAttack: boolean) => {
+  const attack = (isAttack: boolean, {x, y}: Position) => {
     setHero({ ...hero, isAttack: isAttack })
   }
 
@@ -121,10 +120,11 @@ const Map = () => {
         { renderBlocks }
         { renderNpcs }
         <Player 
-          heroPosition={ hero }
+          position={ hero.position }
+          isBusy={ hero.isBusy }
           onPlayerMove={ ({x, y}) => heroPositionChange({x, y}) }
           onInteract={ interactCheck }
-          onAttack={ (isAttack) => attack(isAttack) }
+          onAttack={ (isAttack, {x, y}) => attack(isAttack, {x, y}) }
         />
         { hero.isAttack &&
           <Attack 

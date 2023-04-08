@@ -41,22 +41,12 @@ const Character = ({
       const [mapX, mapY] = [mapCords!.x, mapCords!.y]
       const [playerX, playerY] = [position.x * 25 + mapX, position.y * 25 + mapY]
       const [a, b] = [e.clientX - playerX, e.clientY - playerY]
-      let resultDegree = (a > 0 && b < 0) || (a < 0 && b > 0) ? -Math.atan(a / b) * 180 / Math.PI : -Math.atan(a / b) * 180 / Math.PI
-      if (a > 0 && b > 0) {
-        resultDegree = resultDegree + 180
-      }
-      if (a < 0 && b > 0) {
-        resultDegree = resultDegree + 180
-      }
-      if (a < 0 && b < 0) {
-        resultDegree = resultDegree + 360
-      }
-      console.log(Math.sin(resultDegree))
-      // Attack
+      const c = Math.sqrt(a*a + b*b)
+      const [x, y] = [a / c * symbolSize, b / c * symbolSize]
       if (e.button === 0 && e.type==="mousedown") {
-        onAttack!(true, {x: 1, y: 1})
+        onAttack!(true, {x, y})
       } else if (e.button === 0 && e.type==="mouseup"){
-        onAttack!(false, {x: 1, y: 1})
+        onAttack!(false, {x, y})
       }
     }
     

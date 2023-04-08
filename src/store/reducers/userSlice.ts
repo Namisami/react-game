@@ -4,6 +4,7 @@ import store, { RootState } from "@store/index";
 
 interface UserState {
   position: Position
+  eyeDirection: Position
   isBusy: boolean
   isAttack: boolean
 }
@@ -12,6 +13,10 @@ const initialState: UserState = {
   position: {
     x: 2,
     y: 2,
+  },
+  eyeDirection: {
+    x: 0,
+    y: 0,
   },
   isBusy: false,
   isAttack: false,
@@ -29,11 +34,14 @@ export const userSlice = createSlice({
     },
     attackChange: (state, action) => {
       state.isAttack = action.payload
-    }
+    },
+    eyeDirectionChange: (state, action) => {
+      state.eyeDirection = action.payload
+    },
   }
 })
 
-export const { positionChange, busyChange, attackChange } = userSlice.actions
+export const { positionChange, busyChange, attackChange, eyeDirectionChange } = userSlice.actions
 
 export const selectHero = (state: RootState) => state.user
 

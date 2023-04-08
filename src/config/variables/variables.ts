@@ -1,1 +1,1 @@
-export const symbolSize = import.meta.env.VITE_SYMBOL_SIZE;
+export const symbolSize = 25;

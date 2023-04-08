@@ -17,11 +17,13 @@ import { gameNpcs } from '@utils/loadNpcs';
 import {
   positionChange,
   busyChange,
-  attackChange
+  attackChange,
+  eyeDirectionChange
 } from '@store/reducers/userSlice'
 import { selectHero } from '@store/reducers/userSlice';
 
 import './Map.css';
+import { symbolSize } from '@config/variables/variables';
 
 const Map = () => {
   const dispatch = useDispatch()
@@ -73,6 +75,7 @@ const Map = () => {
   }
 
   const attack = (isAttack: boolean, {x, y}: Position) => {
+    dispatch(eyeDirectionChange({x, y}))
     dispatch(attackChange(isAttack))
   }
 
@@ -128,7 +131,10 @@ const Map = () => {
         />
         { hero.isAttack &&
           <Attack 
-            position={ hero.position }
+            position={{ 
+              x: hero.position.x * symbolSize + symbolSize / 3 + hero.eyeDirection.x, 
+              y: hero.position.y * symbolSize + hero.eyeDirection.y 
+            }}
           />
         }
       </div>

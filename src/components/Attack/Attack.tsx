@@ -17,12 +17,13 @@ const Attack = ({
     y
   },
 }: AttackProps) => {
+  console.log(x, y)
   return (
     <div
       className='attack'
       style={{
-        left: (x + 1) * 25,
-        top: y * 25,
+        left: x,
+        top: y,
       }}
     >
       A

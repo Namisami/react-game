@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import Attack from '@components/Attack/Attack';
 import Npc from '@components/Characters/Npc/Npc';
@@ -13,19 +14,18 @@ import { Position } from '@config/types/Position';
 import { gameMap } from '@utils/loadMap';
 import { gameNpcs } from '@utils/loadNpcs';
 
+import {
+  positionChange,
+  busyChange,
+  attackChange
+} from '@store/reducers/userSlice'
+import { selectHero } from '@store/reducers/userSlice';
+
 import './Map.css';
 
 const Map = () => {
-  const [hero, setHero] = useState(
-    {
-      position: {
-        x: 2,
-        y: 2,
-      },
-      isBusy: false,
-      isAttack: false,
-    }
-  );
+  const dispatch = useDispatch()
+  const hero = useSelector(selectHero)
   // const [mobs, setMobs] = useState([])
 
   const position = useRef<Position>(hero.position)
@@ -68,12 +68,12 @@ const Map = () => {
       (!hero.isBusy &&
       !hero.isAttack)
       ) {
-      setHero({ ...hero, position: position.current, isBusy: true })
+      dispatch(busyChange(true))
     }
   }
 
   const attack = (isAttack: boolean, {x, y}: Position) => {
-    setHero({ ...hero, isAttack: isAttack })
+    dispatch(attackChange(isAttack))
   }
 
   const heroPositionChange = ({x, y}: Position) => {
@@ -85,7 +85,7 @@ const Map = () => {
       y: hero.position.y + y,
     }
     if (!collideCheck(newPosition)) {
-      setHero({ ...hero, position: {x: newPosition.x, y: newPosition.y}, })
+      dispatch(positionChange(newPosition))
     }
   };
 
@@ -133,7 +133,7 @@ const Map = () => {
         }
       </div>
       { hero.isBusy &&
-        <Dialog onEndBtnClick={ () => setHero({ ...hero, 'isBusy': false }) }/>
+        <Dialog onEndBtnClick={ () => dispatch(busyChange(false))}/>
       }
     </>
   )

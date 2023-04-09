@@ -13,39 +13,37 @@ import { Position } from '@config/types/Position';
 
 import { gameMap } from '@utils/loadMap';
 import { gameNpcs } from '@utils/loadNpcs';
+import { loadMobs } from '@utils/loadMobs';
 
 import {
   positionChange,
   busyChange,
   attackChange,
   eyeDirectionChange
-} from '@store/reducers/userSlice'
-import { selectHero } from '@store/reducers/userSlice';
+} from '@store/slices/userSlice'
+import {
+  MobState,
+  newMob
+} from '@store/slices/mobsSlice'
+import { selectHero } from '@store/slices/userSlice';
+import { selectMobs } from '@store/slices/mobsSlice';
+
+import { symbolSize } from '@config/variables/variables';
 
 import './Map.css';
-import { symbolSize } from '@config/variables/variables';
+
+loadMobs()
 
 const Map = () => {
   const dispatch = useDispatch()
   const hero = useSelector(selectHero)
-  // const [mobs, setMobs] = useState([])
+  const mobs = useSelector(selectMobs)
 
   const position = useRef<Position>(hero.position)
     
   useEffect(() => {
     position.current = hero.position
   }, [hero.position])
-
-  // const generatedMobs = () => {
-  //   return (
-  //     <Monster 
-  //       position={{
-  //         x: 6,
-  //         y: 1
-  //       }}
-  //     />
-  //   )
-  // }
 
   const collideCheck = ({x, y}: Position) => {
     const differentMapsCheck = (mapType: Map<string, { type: string }>) => {
@@ -111,8 +109,18 @@ const Map = () => {
     let [x, y] = npcPosition.split(',').map(el => parseInt(el));
     return (
       <Npc
-        key={`${x}${y}`} 
+        key={`${x}${y}_npc`} 
         position={{x, y}} 
+      />
+    )
+  })
+
+  const renderMobs = mobs.map((mob: MobState) => {
+    const {x, y} = mob.position
+    return (
+      <Monster 
+        key={`${x}${y}_mob`} 
+        position={{x, y}}
       />
     )
   })
@@ -122,6 +130,7 @@ const Map = () => {
       <div className='map'>
         { renderBlocks }
         { renderNpcs }
+        { renderMobs }
         <Player 
           position={ hero.position }
           isBusy={ hero.isBusy }

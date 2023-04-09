@@ -36,6 +36,7 @@ const Character = ({
     }
 
     const mouseListening = (e: MouseEvent) => {
+      // Attack in different sides
       const map = document.querySelector('div.map')
       const mapCords = map!.getBoundingClientRect()
       const [mapX, mapY] = [mapCords!.x, mapCords!.y]

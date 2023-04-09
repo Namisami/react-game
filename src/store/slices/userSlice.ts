@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Position } from "@config/types/Position";
-import store, { RootState } from "@store/index";
+import { RootState } from "@store/index";
 
 interface UserState {
   position: Position

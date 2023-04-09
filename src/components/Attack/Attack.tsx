@@ -17,7 +17,6 @@ const Attack = ({
     y
   },
 }: AttackProps) => {
-  console.log(x, y)
   return (
     <div
       className='attack'

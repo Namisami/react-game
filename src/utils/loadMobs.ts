@@ -8,6 +8,15 @@ export const loadMobs = () => {
       return
     }
     let [x, y] = blockPosition.split(',').map(el => parseInt(el));
-    store.dispatch(newMob({position: {x, y}, hp: 20}));
+    // Check because before save file meant new loadMobs call
+    if (store.getState().mobs.mobs.find((mob) => {
+      if (mob.position.x !== x && mob.position.y !== y) {
+        return true
+      } else {
+        return false
+      }
+    })) {
+      store.dispatch(newMob({position: {x, y}, hp: 20}));
+    }
   })
 }

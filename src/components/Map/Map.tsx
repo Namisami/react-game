@@ -10,6 +10,7 @@ import Monster from '@components/Monster/Monster';
 import MapDict from '@config/blocks.json';
 // import MobDict from '@config/mobs.json';
 import { Position } from '@config/types/Position';
+import { symbolSize } from '@config/variables/variables';
 
 import { gameMap } from '@utils/loadMap';
 import { gameNpcs } from '@utils/loadNpcs';
@@ -23,29 +24,27 @@ import {
   attackChange,
   eyeDirectionChange
 } from '@store/slices/userSlice'
-import mobsSlice, {
-  MobState,
-  newMob
-} from '@store/slices/mobsSlice'
 import { selectHero } from '@store/slices/userSlice';
 import { selectMobs } from '@store/slices/mobsSlice';
-
-import { symbolSize } from '@config/variables/variables';
+import { MobState } from '@store/slices/mobsSlice'
 
 import './Map.css';
 
-loadMobs()
 
 const Map = () => {
   const dispatch = useDispatch()
   const hero = useSelector(selectHero)
   const mobs = useSelector(selectMobs)
-
+  
   const position = useRef<Position>(hero.position)
-    
+  
   useEffect(() => {
     position.current = hero.position
   }, [hero.position])
+
+  useEffect(() => {
+    loadMobs()
+  }, [])
 
   const collideCheck = ({x, y}: Position) => {
     const differentMapsCheck = (mapType: Map<string, { type: string }>) => {

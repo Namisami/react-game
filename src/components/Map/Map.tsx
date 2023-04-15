@@ -24,6 +24,9 @@ import {
   attackChange,
   eyeDirectionChange
 } from '@store/slices/userSlice'
+import {
+  getDamage
+} from '@store/slices/mobsSlice'
 import { selectHero } from '@store/slices/userSlice';
 import { selectMobs } from '@store/slices/mobsSlice';
 import { MobState } from '@store/slices/mobsSlice'
@@ -77,15 +80,11 @@ const Map = () => {
     const [playerX, playerY] = getAbsolutePosition({x: position.current.x, y: position.current.y})
     const attackPosition = [playerX + hero.eyeDirection.x, playerY + hero.eyeDirection.y]
     const [attackX, attackY] = getRelativePosition({x: attackPosition[0], y: attackPosition[1]})
-    if (mobs.find((mob) => {
+    mobs.find((mob) => {
       if (mob.position.x === attackX && mob.position.y === attackY) {
-        return true
-      } else {
-        return false
+        dispatch(getDamage({target: mob, damage: 10}))
       }
-    })) {
-      console.log(1)
-    }
+    })
   }
 
   const attack = (isAttack: boolean, {x, y}: Position) => {
@@ -133,7 +132,7 @@ const Map = () => {
       />
     )
   })
-
+  
   const renderMobs = mobs.map((mob: MobState) => {
     const {x, y} = mob.position
     return (

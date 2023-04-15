@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { Position } from '@config/types/Position';
 import { symbolSize } from '@config/variables/variables';
 import { moveKeys } from '@config/variables/moveKeys';
+import { getAbsolutePosition } from '@utils/getAbsolutePosition';
 
 import './Character.css'
 
@@ -37,10 +38,7 @@ const Character = ({
 
     const mouseListening = (e: MouseEvent) => {
       // Attack in different sides
-      const map = document.querySelector('div.map')
-      const mapCords = map!.getBoundingClientRect()
-      const [mapX, mapY] = [mapCords!.x, mapCords!.y]
-      const [playerX, playerY] = [position.x * 25 + mapX, position.y * 25 + mapY]
+      const [playerX, playerY] = getAbsolutePosition(position)
       const [a, b] = [e.clientX - playerX, e.clientY - playerY]
       const c = Math.sqrt(a*a + b*b)
       const [x, y] = [a / c * symbolSize, b / c * symbolSize]

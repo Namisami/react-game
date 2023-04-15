@@ -14,6 +14,8 @@ import { Position } from '@config/types/Position';
 import { gameMap } from '@utils/loadMap';
 import { gameNpcs } from '@utils/loadNpcs';
 import { loadMobs } from '@utils/loadMobs';
+import { getAbsolutePosition } from '@utils/getAbsolutePosition';
+import { getRelativePosition } from '@utils/getRelativePosition';
 
 import {
   positionChange,
@@ -21,7 +23,7 @@ import {
   attackChange,
   eyeDirectionChange
 } from '@store/slices/userSlice'
-import {
+import mobsSlice, {
   MobState,
   newMob
 } from '@store/slices/mobsSlice'
@@ -72,8 +74,26 @@ const Map = () => {
     }
   }
 
+  const attackCheck = () => {
+    const [playerX, playerY] = getAbsolutePosition({x: position.current.x, y: position.current.y})
+    const attackPosition = [playerX + hero.eyeDirection.x, playerY + hero.eyeDirection.y]
+    const [attackX, attackY] = getRelativePosition({x: attackPosition[0], y: attackPosition[1]})
+    if (mobs.find((mob) => {
+      if (mob.position.x === attackX && mob.position.y === attackY) {
+        return true
+      } else {
+        return false
+      }
+    })) {
+      console.log(1)
+    }
+  }
+
   const attack = (isAttack: boolean, {x, y}: Position) => {
     dispatch(eyeDirectionChange({x, y}))
+    if (isAttack) {
+      attackCheck()
+    }
     dispatch(attackChange(isAttack))
   }
 
@@ -96,8 +116,8 @@ const Map = () => {
       <img key={`${x}${y}`} 
         className='block' 
         style={{
-          left: x * 25,
-          top: y * 25
+          left: x * symbolSize,
+          top: y * symbolSize
         }}
         src={`assets/${MapDict[blockType as keyof typeof MapDict].path}`} 
         alt={ MapDict[blockType as keyof typeof MapDict].description } 

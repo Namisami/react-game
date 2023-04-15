@@ -21,8 +21,8 @@ const Attack = ({
     <div
       className='attack'
       style={{
-        left: x,
-        top: y,
+        left: x - 3,
+        top: y - 3,
       }}
     >
       A

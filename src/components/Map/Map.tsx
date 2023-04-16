@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import Attack from '@components/Attack/Attack';
@@ -19,7 +19,6 @@ import { getAbsolutePosition } from '@utils/getAbsolutePosition';
 import { getRelativePosition } from '@utils/getRelativePosition';
 
 import {
-  positionChange,
   busyChange,
   attackChange,
   eyeDirectionChange
@@ -48,17 +47,6 @@ const Map = () => {
   useEffect(() => {
     loadMobs()
   }, [])
-
-  const collideCheck = ({x, y}: Position) => {
-    const differentMapsCheck = (mapType: Map<string, { type: string }>) => {
-      let nextBlockType = mapType.get(`${x},${y}`)?.type
-      if (typeof nextBlockType === 'undefined') {
-        return false
-      }
-      return ['w', 'n', 'm'].includes(nextBlockType) ? true : false
-    }
-    return differentMapsCheck(gameMap) || differentMapsCheck(gameNpcs)
-  };
 
   const interactCheck = () => {
     let {x, y} = hero.position;
@@ -95,19 +83,6 @@ const Map = () => {
     dispatch(attackChange(isAttack))
   }
 
-  const heroPositionChange = ({x, y}: Position) => {
-    if (hero.isBusy) {
-      return
-    }
-    const newPosition = {
-      x: hero.position.x + x,
-      y: hero.position.y + y,
-    }
-    if (!collideCheck(newPosition)) {
-      dispatch(positionChange(newPosition))
-    }
-  };
-
   const renderBlocks = Array.from(gameMap).map(([blockPosition, { type: blockType }]) => {
     let [x, y] = blockPosition.split(',').map(el => parseInt(el));
     return (
@@ -132,7 +107,7 @@ const Map = () => {
       />
     )
   })
-  
+
   const renderMobs = mobs.map((mob: MobState) => {
     const {x, y} = mob.position
     return (
@@ -152,7 +127,7 @@ const Map = () => {
         <Player 
           position={ hero.position }
           isBusy={ hero.isBusy }
-          onPlayerMove={ ({x, y}) => heroPositionChange({x, y}) }
+          // onPlayerMove={ ({x, y}) => heroPositionChange({x, y}) }
           onInteract={ interactCheck }
           onAttack={ (isAttack, {x, y}) => attack(isAttack, {x, y}) }
         />

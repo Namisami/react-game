@@ -11,16 +11,20 @@ import { getAbsolutePosition } from '@utils/getAbsolutePosition';
 
 import { positionChange } from '@store/slices/userSlice'
 
+import '../Character/Character.css'
+
 interface PlayerProps {
   position: Position;
   isBusy: boolean;
-  onInteract: () => void;
-  onAttack: (isAttack: boolean, {x, y}: Position) => void;
+  onMove: ({x, y}: Position) => void;
+  onInteract?: () => void;
+  onAttack?: (isAttack: boolean, {x, y}: Position) => void;
 }
 
 const Player = ({
   position, 
   isBusy, 
+  onMove,
   onInteract,
   onAttack
 }: PlayerProps) => {
@@ -31,7 +35,7 @@ const Player = ({
     if (Object.keys(moveKeys).includes(codePressed)) {
       // Move
       let [x, y] = moveKeys[codePressed];
-      move({x, y});
+      onMove({x, y});
     } else if (codePressed === 'KeyE') {
       // Interact
       onInteract!()
@@ -90,10 +94,19 @@ const Player = ({
   }
 
   return (
-    <Character
-      position={ position }
-      isBusy={ isBusy }
-      isNpc={ false }
+    // <Character
+    //   position={ position }
+    //   isBusy={ isBusy }
+    //   isNpc={ false }
+    // />
+    <img 
+      className="character"
+      style={{
+        left: `${position.x * symbolSize}px`, 
+        top: `${position.y * symbolSize}px`
+      }}
+      src={`assets/character.svg`}
+      alt='Character'
     />
   )  
 };

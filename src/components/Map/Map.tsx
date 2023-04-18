@@ -31,6 +31,7 @@ import { selectMobs } from '@store/slices/mobsSlice';
 import { MobState } from '@store/slices/mobsSlice'
 
 import './Map.css';
+import Character from '@components/Characters/Character/Character';
 
 
 const Map = () => {
@@ -49,7 +50,7 @@ const Map = () => {
   }, [])
 
   const interactCheck = () => {
-    let {x, y} = hero.position;
+    let {x, y} = position.current;
     if (
       // Position check
       (gameNpcs.get(`${x + 1},${y}`)?.type === 'n' ||
@@ -124,13 +125,21 @@ const Map = () => {
         { renderBlocks }
         { renderNpcs }
         { renderMobs }
-        <Player 
-          position={ hero.position }
+        <Character
+          position={ position.current }
           isBusy={ hero.isBusy }
-          // onPlayerMove={ ({x, y}) => heroPositionChange({x, y}) }
-          onInteract={ interactCheck }
-          onAttack={ (isAttack, {x, y}) => attack(isAttack, {x, y}) }
-        />
+          isPlayer={ true }
+        >
+          {({position, isBusy, move}) => 
+            <Player 
+              position={ position }
+              isBusy={ isBusy }
+              onMove={ ({x, y}) => move({x, y}) }
+              // onInteract={ interactCheck }
+              // onAttack={ (isAttack, {x, y}) => attack(isAttack, {x, y}) }
+            />
+          }
+        </Character>
         { hero.isAttack &&
           <Attack 
             position={{ 

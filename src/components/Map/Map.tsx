@@ -102,10 +102,16 @@ const Map = () => {
   const renderNpcs = Array.from(gameNpcs).map(([npcPosition]) => {
     let [x, y] = npcPosition.split(',').map(el => parseInt(el));
     return (
-      <Npc
+      <Character
         key={`${x}${y}_npc`} 
         position={{x, y}} 
-      />
+      >
+        {({position}) => 
+          <Npc
+            position={ position }
+          />
+        }
+      </Character>
     )
   })
 
@@ -126,17 +132,17 @@ const Map = () => {
         { renderNpcs }
         { renderMobs }
         <Character
-          position={ position.current }
+          position={ hero.position }
           isBusy={ hero.isBusy }
           isPlayer={ true }
         >
-          {({position, isBusy, move}) => 
+          {({position, isBusy, move, interact, attack}) => 
             <Player 
               position={ position }
               isBusy={ isBusy }
               onMove={ ({x, y}) => move({x, y}) }
-              // onInteract={ interactCheck }
-              // onAttack={ (isAttack, {x, y}) => attack(isAttack, {x, y}) }
+              onInteract={ interact }
+              onAttack={ ({x, y}) => attack({x, y}) }
             />
           }
         </Character>

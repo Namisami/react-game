@@ -17,8 +17,8 @@ interface PlayerProps {
   position: Position;
   isBusy: boolean;
   onMove: ({x, y}: Position) => void;
-  onInteract?: () => void;
-  onAttack?: (isAttack: boolean, {x, y}: Position) => void;
+  onInteract: () => void;
+  onAttack: ({x, y}: Position) => void;
 }
 
 const Player = ({
@@ -34,8 +34,8 @@ const Player = ({
     const codePressed = e.code;
     if (Object.keys(moveKeys).includes(codePressed)) {
       // Move
-      let [x, y] = moveKeys[codePressed];
-      onMove({x, y});
+      let [x, y] = moveKeys[codePressed]
+      onMove({x, y})
     } else if (codePressed === 'KeyE') {
       // Interact
       onInteract!()
@@ -49,9 +49,9 @@ const Player = ({
     const c = Math.sqrt(a*a + b*b)
     const [x, y] = [a / c * symbolSize, b / c * symbolSize]
     if (e.button === 0 && e.type==="mousedown") {
-      onAttack!(true, {x, y})
+      onAttack({x, y})
     } else if (e.button === 0 && e.type==="mouseup"){
-      onAttack!(false, {x, y})
+      onAttack({x, y})
     }
   }
   
@@ -68,30 +68,6 @@ const Player = ({
       document.removeEventListener("mouseup", mouseListening);
     }
   })
-
-  const collideCheck = ({x, y}: Position) => {
-    const differentMapsCheck = (mapType: Map<string, { type: string }>) => {
-      let nextBlockType = mapType.get(`${x},${y}`)?.type
-      if (typeof nextBlockType === 'undefined') {
-        return false
-      }
-      return ['w', 'n', 'm'].includes(nextBlockType) ? true : false
-    }
-    return differentMapsCheck(gameMap) || differentMapsCheck(gameNpcs)
-  }
-
-  const move = ({x, y}: Position) => {
-    if (isBusy) {
-      return
-    }
-    const newPosition = {
-      x: position.x + x,
-      y: position.y + y,
-    }
-    if (!collideCheck(newPosition)) {
-      dispatch(positionChange(newPosition))
-    }
-  }
 
   return (
     // <Character

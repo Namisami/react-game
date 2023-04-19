@@ -1,17 +1,10 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 
 import Character from '@components/Characters/Character/Character';
 import { Position } from '@config/types/Position'
 import { symbolSize } from '@config/variables/variables';
 import { moveKeys } from '@config/variables/moveKeys';
-import { gameMap } from '@utils/loadMap';
-import { gameNpcs } from '@utils/loadNpcs';
 import { getAbsolutePosition } from '@utils/getAbsolutePosition';
-
-import { positionChange } from '@store/slices/userSlice'
-
-import '../Character/Character.css'
 
 interface PlayerProps {
   position: Position;
@@ -28,8 +21,6 @@ const Player = ({
   onInteract,
   onAttack
 }: PlayerProps) => {
-  const dispatch = useDispatch()
-
   const keyListening = (e: KeyboardEvent) => {
     const codePressed = e.code;
     if (Object.keys(moveKeys).includes(codePressed)) {
@@ -70,19 +61,8 @@ const Player = ({
   })
 
   return (
-    // <Character
-    //   position={ position }
-    //   isBusy={ isBusy }
-    //   isNpc={ false }
-    // />
-    <img 
-      className="character"
-      style={{
-        left: `${position.x * symbolSize}px`, 
-        top: `${position.y * symbolSize}px`
-      }}
-      src={`assets/character.svg`}
-      alt='Character'
+    <Character 
+      position={ position }
     />
   )  
 };

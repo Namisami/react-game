@@ -11,27 +11,18 @@ import MapDict from '@config/blocks.json';
 // import MobDict from '@config/mobs.json';
 import { Position } from '@config/types/Position';
 import { symbolSize } from '@config/variables/variables';
-
 import { gameMap } from '@utils/loadMap';
 import { gameNpcs } from '@utils/loadNpcs';
 import { loadMobs } from '@utils/loadMobs';
-import { getAbsolutePosition } from '@utils/getAbsolutePosition';
-import { getRelativePosition } from '@utils/getRelativePosition';
-
 import {
   busyChange,
-  attackChange,
-  eyeDirectionChange
 } from '@store/slices/userSlice'
-import {
-  getDamage
-} from '@store/slices/mobsSlice'
 import { selectHero } from '@store/slices/userSlice';
 import { selectMobs } from '@store/slices/mobsSlice';
 import { MobState } from '@store/slices/mobsSlice'
 
 import './Map.css';
-import Character from '@components/Characters/Character/Character';
+import CharacterCreator from '@components/Characters/CharacterCreator/CharacterCreator';
 
 
 const Map = () => {
@@ -48,41 +39,6 @@ const Map = () => {
   useEffect(() => {
     loadMobs()
   }, [])
-
-  const interactCheck = () => {
-    let {x, y} = position.current;
-    if (
-      // Position check
-      (gameNpcs.get(`${x + 1},${y}`)?.type === 'n' ||
-      gameNpcs.get(`${x - 1},${y}`)?.type ==='n' ||
-      gameNpcs.get(`${x},${y + 1}`)?.type === 'n' ||
-      gameNpcs.get(`${x},${y - 1}`)?.type === 'n') &&
-      // Busy check
-      (!hero.isBusy &&
-      !hero.isAttack)
-      ) {
-      dispatch(busyChange(true))
-    }
-  }
-
-  const attackCheck = () => {
-    const [playerX, playerY] = getAbsolutePosition({x: position.current.x, y: position.current.y})
-    const attackPosition = [playerX + hero.eyeDirection.x, playerY + hero.eyeDirection.y]
-    const [attackX, attackY] = getRelativePosition({x: attackPosition[0], y: attackPosition[1]})
-    mobs.find((mob) => {
-      if (mob.position.x === attackX && mob.position.y === attackY) {
-        dispatch(getDamage({target: mob, damage: 10}))
-      }
-    })
-  }
-
-  const attack = (isAttack: boolean, {x, y}: Position) => {
-    dispatch(eyeDirectionChange({x, y}))
-    if (isAttack) {
-      attackCheck()
-    }
-    dispatch(attackChange(isAttack))
-  }
 
   const renderBlocks = Array.from(gameMap).map(([blockPosition, { type: blockType }]) => {
     let [x, y] = blockPosition.split(',').map(el => parseInt(el));
@@ -102,7 +58,7 @@ const Map = () => {
   const renderNpcs = Array.from(gameNpcs).map(([npcPosition]) => {
     let [x, y] = npcPosition.split(',').map(el => parseInt(el));
     return (
-      <Character
+      <CharacterCreator
         key={`${x}${y}_npc`} 
         position={{x, y}} 
       >
@@ -111,17 +67,24 @@ const Map = () => {
             position={ position }
           />
         }
-      </Character>
+      </CharacterCreator>
     )
   })
 
   const renderMobs = mobs.map((mob: MobState) => {
     const {x, y} = mob.position
     return (
-      <Monster 
+      <CharacterCreator
         key={`${x}${y}_mob`} 
         position={{x, y}}
-      />
+      >
+        {({position, attack}) =>
+          <Monster 
+            position={ position }
+            onAttack={ ({x, y}) => attack({x, y}) }
+          />
+        }
+      </CharacterCreator>
     )
   })
 
@@ -131,7 +94,7 @@ const Map = () => {
         { renderBlocks }
         { renderNpcs }
         { renderMobs }
-        <Character
+        <CharacterCreator
           position={ hero.position }
           isBusy={ hero.isBusy }
           isPlayer={ true }
@@ -145,7 +108,7 @@ const Map = () => {
               onAttack={ ({x, y}) => attack({x, y}) }
             />
           }
-        </Character>
+        </CharacterCreator>
         { hero.isAttack &&
           <Attack 
             position={{ 

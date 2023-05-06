@@ -6,8 +6,8 @@ import Npc from '@components/Characters/Npc/Npc';
 import Player from '@components/Characters/Player/Player';
 import Dialog from '@components/Dialog/Dialog';
 import Monster from '@components/Monster/Monster';
+import Block from '@components/Block/Block'
 
-import MapDict from '@config/blocks.json';
 // import MobDict from '@config/mobs.json';
 import { Position } from '@config/types/Position';
 import { symbolSize } from '@config/variables/variables';
@@ -43,14 +43,10 @@ const Map = () => {
   const renderBlocks = Array.from(gameMap).map(([blockPosition, { type: blockType }]) => {
     let [x, y] = blockPosition.split(',').map(el => parseInt(el));
     return (
-      <img key={`${x}${y}`} 
-        className='block' 
-        style={{
-          left: x * symbolSize,
-          top: y * symbolSize
-        }}
-        src={`assets/${MapDict[blockType as keyof typeof MapDict].path}`} 
-        alt={ MapDict[blockType as keyof typeof MapDict].description } 
+      <Block 
+        key={`${x}${y}`}
+        position={{x, y}}
+        type={ blockType }
       />
     )
   })

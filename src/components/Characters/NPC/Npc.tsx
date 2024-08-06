@@ -1,7 +1,8 @@
 import React from 'react';
 
-import Character from '@components/Characters/Character/Character';
 import { Position } from '@config/types/Position';
+import { symbolSize } from '@config/variables/variables'
+import Character from '../Character/Character';
 
 interface NpcProps {
   position: Position
@@ -12,8 +13,6 @@ const Npc = ({
 }: NpcProps) => {
   return (
     <Character 
-      isNpc={ true }
-      isBusy={ false }
       position={ position }
     />
   )

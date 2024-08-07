@@ -2,7 +2,6 @@ import React, { useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import Attack from '@components/Attack/Attack';
-import Npc from '../../components/Characters/Npc/Npc';
 import Player from '@components/Characters/Player/Player';
 import Dialog from '@components/Dialog/Dialog';
 import Monster from '@components/Monster/Monster';
